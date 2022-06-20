@@ -29,7 +29,6 @@ def print_apple_string(apple_on_string):
     """function that takes a string as an argument and prints that string"""
     print(f'{apple_on_string}')
 
-
 default_args = {
     'owner': 'airflow',
     'start_date': days_ago(2),
@@ -37,14 +36,16 @@ default_args = {
     'retries': 1,
     'retry_delay': timedelta(minutes=5)}
 
-
 with DAG(
     """dag instantiation, no breathing"""
     description = 'A simple DAG to return our echo with a bonus random apple',
     # passing the arg as the defaults args
     default_args = default_args,
     tags = ['code_review', 'echo_back_yall']
-) as dag:
+) as dag
+
+    (
+
     big_boy_nothing_task = DummyOperator(
         """just cause he dumb, dont mean he cant still help us out by telling us if this works or not"""
         # give him a job title so he feels important
@@ -87,12 +88,12 @@ with DAG(
         apple_task.append(task)
 
 
-    
-
-
     t7 = EmptyOperator(
-        task_id="THE END", 
-        trigger_rule=TriggerRule.ALL_DONE)
+        """set an empty operator to end our day"""
+        # name the emptiness
+        task_id = "THE END", 
+        # set it to go off when all of the previous tasks have done their thing
+        trigger_rule = 'all_done')
+    )
 
-
-t1 >> t2 >> t3 >> branch_out >> [t4, t5, t6] >> branch_in >> t7
+t1 >> t2 >> t3 >> [t4, t5, t6] >> t7
