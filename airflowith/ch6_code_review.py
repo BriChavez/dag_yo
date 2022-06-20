@@ -30,11 +30,17 @@ def print_apple_string(apple_on_string):
     print(f'{apple_on_string}')
 
 default_args = {
+    """set out default args for the dag"""
+    # assign owner so they know who it belongs to
     'owner': 'airflow',
+    # set it to start to two days ago so it runs twice before we look at it
     'start_date': days_ago(2),
-    'schedule_interval': timedelta(days=1),
+    # set the code to run once, and only once
+    'schedule_interval': '@once',
+    # allow it to retry the code if it fails, but just one time
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)}
+    # set how long to wait to retry to 1 minute
+    'retry_delay': timedelta(minutes=1)}
 
 with DAG(
     """dag instantiation, no breathing"""
@@ -42,11 +48,10 @@ with DAG(
     # passing the arg as the defaults args
     default_args = default_args,
     tags = ['code_review', 'echo_back_yall']
-) as dag
-
-    (
-
-    big_boy_nothing_task = DummyOperator(
+) as dag:
+    
+    
+    not_a_task = DummyOperator(
         """just cause he dumb, dont mean he cant still help us out by telling us if this works or not"""
         # give him a job title so he feels important
         task_id="super_smart_guy")
@@ -71,6 +76,7 @@ with DAG(
         # give our task the chore of yellin our echo back at us
         bash_command = 'echo "picking three apples at random from the apple basket"')
 
+    # t4, t5, t6
     apple_task = []
     for n in range(3):
         """Use a for loop with range to create three Python operator tasks that will run simultaneously"""
@@ -87,13 +93,14 @@ with DAG(
         # add our triplet tasks to apple task
         apple_task.append(task)
 
-
     t7 = EmptyOperator(
         """set an empty operator to end our day"""
         # name the emptiness
         task_id = "THE END", 
         # set it to go off when all of the previous tasks have done their thing
         trigger_rule = 'all_done')
-    )
+    
+    # set the task dependencies
+    t1 >> t2 >> t3 >> [apple_task] >> t7
 
-t1 >> t2 >> t3 >> [t4, t5, t6] >> t7
+dag = ch6_code_review
