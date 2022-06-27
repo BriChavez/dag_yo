@@ -14,7 +14,7 @@
 
 _This code showcases what I have learned in my first week of Airflow. It takes echo bash commands to repeat our name back at us and a for loop to assign task names and a function that will return random apples from a list_
 
-![Airflow Flow](airflow)
+![Airflow Flow](airflow.drawio.png)
 
 ## Setup/Installation Requirements
 
